@@ -168,7 +168,7 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
     
     NSMutableString* output = [NSMutableString string];
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
-    [output appendFormat:@"HTTP/1.1 %i %@ (%@ %@%@)\n", [response statusCode], stringForStatusCode([response statusCode]), [request HTTPMethod], [[request URL] path], ([[request URL] query] ? [NSString stringWithFormat:@"?%@", [[request URL] query]] : @"")];
+    [output appendFormat:@"HTTP/1.1 %ld %@ (%@ %@%@)\n", (long)[response statusCode], stringForStatusCode([response statusCode]), [request HTTPMethod], [[request URL] path], ([[request URL] query] ? [NSString stringWithFormat:@"?%@", [[request URL] query]] : @"")];
     for (NSString* name in [response allHeaderFields]) {
         [output appendFormat:@"%@: %@\n", name, [response allHeaderFields][name]];
     }
