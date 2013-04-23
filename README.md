@@ -32,7 +32,7 @@ Don't forget to `#import "MCHTTPRequestLogger.h"` where it's needed.
 
 MCHTTPRequestLogger is © 2013 [Mirego](http://www.mirego.com) and may be freely
 distributed under the [New BSD license](http://opensource.org/licenses/BSD-3-Clause).
-See the [`LICENSE.md`](https://github.com/mirego/MCUIColorUtils/blob/master/LICENSE.md) file.
+See the [`LICENSE.md`](https://github.com/mirego/MCHTTPRequestLogger/blob/master/LICENSE.md) file.
 
 ## About Mirego
 
