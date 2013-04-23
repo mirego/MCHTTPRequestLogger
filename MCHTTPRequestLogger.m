@@ -1,7 +1,7 @@
 //
 // MCHTTPRequestLogger.m
 //
-// Copyright (c) 2012, Mirego, Inc.
+// Copyright (c) 2013, Mirego
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -12,7 +12,7 @@
 // - Redistributions in binary form must reproduce the above copyright notice,
 //   this list of conditions and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-// - Neither the name of the Mirego, Inc. nor the names of its contributors may
+// - Neither the name of the Mirego nor the names of its contributors may
 //   be used to endorse or promote products derived from this software without
 //   specific prior written permission.
 //
@@ -27,6 +27,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+// POSSIBILITY OF SUCH DAMAGE.
 
 #import "MCHTTPRequestLogger.h"
 #import "AFHTTPRequestOperation.h"
@@ -36,7 +37,7 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
     @100 : @"Continue",
     @101 : @"Switching Protocols",
     @102 : @"Processing",
-    
+
     @200 : @"OK",
     @201 : @"Created",
     @202 : @"Accepted",
@@ -46,7 +47,7 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
     @206 : @"Partial Content",
     @207 : @"Multi-Status",
     @226 : @"IM Used",
-    
+
     @300 : @"Multiple Choices",
     @301 : @"Moved Permanently",
     @302 : @"Found",
@@ -54,7 +55,7 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
     @304 : @"Not Modified",
     @305 : @"Use Proxy",
     @307 : @"Temporary Redirect",
-    
+
     @400 : @"Bad Request",
     @401 : @"Unauthorized",
     @402 : @"Payment Required",
@@ -78,7 +79,7 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
     @423 : @"Locked",
     @424 : @"Failed Dependency",
     @426 : @"Upgrade Required",
-    
+
     @500 : @"Internal Server Error",
     @501 : @"Not Implemented",
     @502 : @"Bad Gateway",
@@ -101,7 +102,7 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
     dispatch_once(&onceToken, ^{
         sharedLogger = [[MCHTTPRequestLogger alloc] init];
     });
-    
+
     return sharedLogger;
 }
 
@@ -130,16 +131,16 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
 {
     id notificationObject = [notification object];
     if (![notificationObject isKindOfClass:[AFHTTPRequestOperation class]]) return;
-    
+
     AFHTTPRequestOperation* operation = (AFHTTPRequestOperation*)notificationObject;
-    
+
     NSString* body = nil;
     if ([operation.request HTTPBody]) {
         body = [[NSString alloc] initWithData:[operation.request HTTPBody] encoding:NSUTF8StringEncoding];
     }
-    
+
     NSURLRequest* request = operation.request;
-    
+
     NSMutableString* output = [NSMutableString string];
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
     [output appendFormat:@"%@ %@%@ HTTP/1.1\n", [request HTTPMethod], [[request URL] path], ([[request URL] query] ? [NSString stringWithFormat:@"?%@", [[request URL] query]] : @"")];
@@ -160,12 +161,12 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
 {
     id notificationObject = [notification object];
     if (![notificationObject isKindOfClass:[AFHTTPRequestOperation class]]) return;
-    
+
     AFHTTPRequestOperation* operation = (AFHTTPRequestOperation*)notificationObject;
-    
+
     NSURLRequest* request = operation.request;
     NSHTTPURLResponse* response = operation.response;
-    
+
     NSMutableString* output = [NSMutableString string];
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
     [output appendFormat:@"HTTP/1.1 %ld %@ (%@ %@%@)\n", (long)[response statusCode], stringForStatusCode([response statusCode]), [request HTTPMethod], [[request URL] path], ([[request URL] query] ? [NSString stringWithFormat:@"?%@", [[request URL] query]] : @"")];
@@ -177,7 +178,7 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
         [output appendString:operation.responseString];
     }
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
-    
+
     NSLog(@"%@", output);
 }
 
