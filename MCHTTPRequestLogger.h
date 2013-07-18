@@ -43,5 +43,3 @@ typedef enum {
 
 - (void)startLogging;
 - (void)stopLogging;
-
-@end
