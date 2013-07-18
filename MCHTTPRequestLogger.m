@@ -175,16 +175,23 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
     }
     [output appendString:@"\n"];
     if (response && operation.responseData) {
-        NSError *error = nil;
-        id data = [NSJSONSerialization JSONObjectWithData:operation.responseData options:nil error:&error];
-        
-        if(error)
-            [output appendFormat:@"unable to parse response as JSON: %@", error];
-        
-        if(data)
-            [output appendFormat:@"%@", data];
-        else if (operation.responseString)
-            [output appendString:operation.responseString];
+        switch (_style) {
+            case MCLoggingStylePretty:
+                if([response.MIMEType isEqualToString:@"application/json"]) {
+                    NSError *error = nil;
+                    id data = [NSJSONSerialization JSONObjectWithData:operation.responseData options:nil error:&error];
+                    
+                    if(error) {
+                        [output appendFormat:@"unable to parse response as JSON: %@", error];
+                    } else if(data) {
+                        [output appendFormat:@"%@", data];
+                        break;
+                    }
+                }
+            default:
+                [output appendString:operation.responseString];
+                break;
+        }
     }
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
 
