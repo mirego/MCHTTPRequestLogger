@@ -30,11 +30,16 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    MCLoggingStyleRaw,
+    MCLoggingStylePretty
+} MCLoggingStyle;
+
 @interface MCHTTPRequestLogger : NSObject
 
 + (MCHTTPRequestLogger*)sharedLogger;
 
+@property (nonatomic, assign) MCLoggingStyle style;
+
 - (void)startLogging;
 - (void)stopLogging;
-
-@end
