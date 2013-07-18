@@ -178,10 +178,13 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
         NSError *error = nil;
         id data = [NSJSONSerialization JSONObjectWithData:operation.responseData options:nil error:&error];
         
-        if(error)
-            [output appendFormat:@"unable to parse response data: %@", error];
-        else
+        f(error)
+            [output appendFormat:@"unable to parse response as JSON: %@", error];
+        
+        if(data)
             [output appendFormat:@"%@", data];
+        else if (operation.responseString)
+            [output appendString:operation.responseString];
     }
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
 
