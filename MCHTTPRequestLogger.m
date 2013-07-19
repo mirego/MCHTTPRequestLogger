@@ -27,13 +27,13 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-// POSSIBILITY OF SUCH DAMAGE.
 
 #import "MCHTTPRequestLogger.h"
 #import "AFHTTPRequestOperation.h"
 
-static NSString* stringForStatusCode(NSUInteger statusCode) {
-    NSDictionary *statusCodeDictionary  = @{
+static NSString *stringForStatusCode(NSUInteger statusCode)
+{
+    NSDictionary *statusCodeDictionary = @{
     @100 : @"Continue",
     @101 : @"Switching Protocols",
     @102 : @"Processing",
@@ -73,7 +73,7 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
     @414 : @"Request-URI Too Long",
     @415 : @"Unsupported Media Type",
     @416 : @"Requested Range Not Satisfiable",
-    @417 : @"Expectation Failed́",
+    @417 : @"Expectation Failed",
     @418 : @"I'm a teapot",
     @422 : @"Unprocessable Entity",
     @423 : @"Locked",
@@ -95,9 +95,9 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
 
 @implementation MCHTTPRequestLogger
 
-+ (MCHTTPRequestLogger*)sharedLogger
++ (MCHTTPRequestLogger *)sharedLogger
 {
-    static MCHTTPRequestLogger* sharedLogger = nil;
+    static MCHTTPRequestLogger *sharedLogger = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedLogger = [[MCHTTPRequestLogger alloc] init];
@@ -127,25 +127,25 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
 #pragma mark - Notification Handlers
 //------------------------------------------------------------------------------
 
-- (void)operationDidStart:(NSNotification*)notification
+- (void)operationDidStart:(NSNotification *)notification
 {
     id notificationObject = [notification object];
     if (![notificationObject isKindOfClass:[AFHTTPRequestOperation class]]) return;
 
-    AFHTTPRequestOperation* operation = (AFHTTPRequestOperation*)notificationObject;
+    AFHTTPRequestOperation *operation = (AFHTTPRequestOperation *)notificationObject;
 
-    NSString* body = nil;
+    NSString *body = nil;
     if ([operation.request HTTPBody]) {
         body = [[NSString alloc] initWithData:[operation.request HTTPBody] encoding:NSUTF8StringEncoding];
     }
 
-    NSURLRequest* request = operation.request;
+    NSURLRequest *request = operation.request;
 
-    NSMutableString* output = [NSMutableString string];
+    NSMutableString *output = [NSMutableString string];
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
-    [output appendFormat:@"%@ %@%@ HTTP/1.1\n", [request HTTPMethod], [[request URL] path], ([[request URL] query] ? [NSString stringWithFormat:@"?%@", [[request URL] query]] : @"")];
+    [output appendFormat:@"%@ %@%@ HTTP/1.x\n", [request HTTPMethod], [[request URL] path], ([[request URL] query] ? [NSString stringWithFormat:@"?%@", [[request URL] query]] : @"")];
     [output appendFormat:@"Host: %@\n", [[request URL] host]];
-    for (NSString* name in [request allHTTPHeaderFields]) {
+    for (NSString *name in [request allHTTPHeaderFields]) {
         [output appendFormat:@"%@: %@\n", name, [request allHTTPHeaderFields][name]];
     }
     [output appendString:@"\n\n"];
@@ -157,20 +157,20 @@ static NSString* stringForStatusCode(NSUInteger statusCode) {
     NSLog(@"%@", output);
 }
 
-- (void)operationDidFinish:(NSNotification*)notification
+- (void)operationDidFinish:(NSNotification *)notification
 {
     id notificationObject = [notification object];
     if (![notificationObject isKindOfClass:[AFHTTPRequestOperation class]]) return;
 
-    AFHTTPRequestOperation* operation = (AFHTTPRequestOperation*)notificationObject;
+    AFHTTPRequestOperation *operation = (AFHTTPRequestOperation *)notificationObject;
 
-    NSURLRequest* request = operation.request;
-    NSHTTPURLResponse* response = operation.response;
+    NSURLRequest *request = operation.request;
+    NSHTTPURLResponse *response = operation.response;
 
-    NSMutableString* output = [NSMutableString string];
+    NSMutableString *output = [NSMutableString string];
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
-    [output appendFormat:@"HTTP/1.1 %ld %@ (%@ %@%@)\n", (long)[response statusCode], stringForStatusCode([response statusCode]), [request HTTPMethod], [[request URL] path], ([[request URL] query] ? [NSString stringWithFormat:@"?%@", [[request URL] query]] : @"")];
-    for (NSString* name in [response allHeaderFields]) {
+    [output appendFormat:@"HTTP/1.x %ld %@ (%@ %@%@)\n", (long)[response statusCode], stringForStatusCode([response statusCode]), [request HTTPMethod], [[request URL] path], ([[request URL] query] ? [NSString stringWithFormat:@"?%@", [[request URL] query]] : @"")];
+    for (NSString *name in [response allHeaderFields]) {
         [output appendFormat:@"%@: %@\n", name, [response allHeaderFields][name]];
     }
     [output appendString:@"\n\n"];
