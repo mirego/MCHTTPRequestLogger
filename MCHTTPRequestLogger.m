@@ -148,7 +148,7 @@ static NSString *stringForStatusCode(NSUInteger statusCode)
     for (NSString *name in [request allHTTPHeaderFields]) {
         [output appendFormat:@"%@: %@\n", name, [request allHTTPHeaderFields][name]];
     }
-    [output appendString:@"\n\n"];
+    [output appendString:@"\n"];
     if (nil != body) {
         [output appendString:body];
     }
@@ -173,9 +173,25 @@ static NSString *stringForStatusCode(NSUInteger statusCode)
     for (NSString *name in [response allHeaderFields]) {
         [output appendFormat:@"%@: %@\n", name, [response allHeaderFields][name]];
     }
-    [output appendString:@"\n\n"];
-    if (nil != operation.responseString) {
-        [output appendString:operation.responseString];
+    [output appendString:@"\n"];
+    if (response && operation.responseData) {
+        switch (_style) {
+            case MCLoggingStylePretty:
+                if([response.MIMEType isEqualToString:@"application/json"]) {
+                    NSError *error = nil;
+                    id data = [NSJSONSerialization JSONObjectWithData:operation.responseData options:nil error:&error];
+                    
+                    if(error) {
+                        [output appendFormat:@"unable to parse response as JSON: %@", error];
+                    } else if(data) {
+                        [output appendFormat:@"%@", data];
+                        break;
+                    }
+                }
+            default:
+                [output appendString:operation.responseString];
+                break;
+        }
     }
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
 
