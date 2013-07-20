@@ -30,6 +30,7 @@
 
 #import "MCHTTPRequestLogger.h"
 #import "AFHTTPRequestOperation.h"
+#import "AFJSONRequestOperation.h"
 
 static NSString *stringForStatusCode(NSUInteger statusCode)
 {
@@ -106,6 +107,15 @@ static NSString *stringForStatusCode(NSUInteger statusCode)
     return sharedLogger;
 }
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _JSONOutputStyle = MCHTTPRequestLoggerJSONOutputStyleDefault;
+    }
+    
+    return self;
+}
+
 - (void)dealloc
 {
     [self stopLogging];
@@ -175,7 +185,30 @@ static NSString *stringForStatusCode(NSUInteger statusCode)
     }
     [output appendString:@"\n\n"];
     if (nil != operation.responseString) {
-        [output appendString:operation.responseString];
+        switch (self.JSONOutputStyle) {
+            case MCHTTPRequestLoggerJSONOutputStylePrettyPrinted: {
+                if ([[AFJSONRequestOperation acceptableContentTypes] containsObject:response.MIMEType]) {
+                    NSError* error = nil;
+                    id JSONObject = [NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:&error];
+                    if (!error) {
+                        id data = [NSJSONSerialization dataWithJSONObject:JSONObject options:NSJSONWritingPrettyPrinted error:&error];
+                        if (!error) {
+                            [output appendString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+                        } else {
+                            [output appendString:operation.responseString];
+                        }
+                    } else {
+                        [output appendString:operation.responseString];
+                    }
+                } else {
+                    [output appendString:operation.responseString];
+                }
+                break;
+            }
+            case MCHTTPRequestLoggerJSONOutputStyleDefault:
+            default:
+                [output appendString:operation.responseString];
+        }
     }
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
 
