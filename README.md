@@ -8,6 +8,8 @@
 Just add the following code to your `UIApplicationDelegate`, in the method `-application:didFinishLaunchingWithOptions:` and you should see extensive information for each requests/responses in your Xcode console.
 ```objc
 [[MCHTTPRequestLogger sharedLogger] startLogging];
+// Set the JSONOutputStyle property to have pretty printed JSON output
+[[MCHTTPRequestLogger sharedLogger] setJSONOutputStyle:MCHTTPRequestLoggerJSONOutputStylePrettyPrinted];
 ```
 
 ## Important Notes
@@ -23,7 +25,7 @@ Add the following to your [`Podfile`](http://docs.cocoapods.org/podfile.html)
 and run `pod install`
 
 ```
-pod 'MCHTTPRequestLogger', :git => 'https://github.com/mirego/MCHTTPRequestLogger.git'
+pod 'MCHTTPRequestLogger'
 ```
 
 Don't forget to `#import "MCHTTPRequestLogger.h"` where it's needed.
@@ -37,7 +39,7 @@ See the [`LICENSE.md`](https://github.com/mirego/MCHTTPRequestLogger/blob/master
 ## About Mirego
 
 Mirego is a team of passionate people who believe that work is a place where you can innovate and have fun.
-We proudly built mobile applications for
+We proudly build mobile applications for
 [iPhone](http://mirego.com/en/iphone-app-development/ "iPhone application development"),
 [iPad](http://mirego.com/en/ipad-app-development/ "iPad application development"),
 [Android](http://mirego.com/en/android-app-development/ "Android application development"),
