@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'MCHTTPRequestLogger'
-  s.version  = '0.6.0'
+  s.version  = '0.6.1'
   s.license  = 'BSD 3-Clause'
   s.summary  = 'Output HTTP requests made with AFNetworking in the debug console.'
   s.homepage = 'https://github.com/mirego/MCHTTPRequestLogger'
