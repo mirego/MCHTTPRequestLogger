@@ -34,6 +34,8 @@
 #define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
 #endif
 
+static NSString * const MCHTTPRequestLoggerDefaultHeaderIgnore = @"MCHTTPRequestLoggerIgnore";
+
 typedef NS_ENUM(NSInteger, MCHTTPRequestLoggerJSONOutputStyle) {
     MCHTTPRequestLoggerJSONOutputStyleDefault,
     MCHTTPRequestLoggerJSONOutputStylePrettyPrinted

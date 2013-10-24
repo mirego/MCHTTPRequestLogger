@@ -143,13 +143,18 @@ static NSString *stringForStatusCode(NSUInteger statusCode)
     if (![notificationObject isKindOfClass:[AFHTTPRequestOperation class]]) return;
 
     AFHTTPRequestOperation *operation = (AFHTTPRequestOperation *)notificationObject;
-
-    NSString *body = nil;
-    if ([operation.request HTTPBody]) {
-        body = [[NSString alloc] initWithData:[operation.request HTTPBody] encoding:NSUTF8StringEncoding];
+    
+    NSURLRequest *request = operation.request;
+    
+    // If the default header "ignore" is present, cancel logging.
+    if ([[[request allHTTPHeaderFields] allKeys] containsObject:MCHTTPRequestLoggerDefaultHeaderIgnore]) {
+        return;
     }
 
-    NSURLRequest *request = operation.request;
+    NSString *body = nil;
+    if ([request HTTPBody]) {
+        body = [[NSString alloc] initWithData:[operation.request HTTPBody] encoding:NSUTF8StringEncoding];
+    }
 
     NSMutableString *output = [NSMutableString string];
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
@@ -176,6 +181,11 @@ static NSString *stringForStatusCode(NSUInteger statusCode)
 
     NSURLRequest *request = operation.request;
     NSHTTPURLResponse *response = operation.response;
+    
+    // If the default header "ignore" is present, cancel logging.
+    if ([[[request allHTTPHeaderFields] allKeys] containsObject:MCHTTPRequestLoggerDefaultHeaderIgnore]) {
+        return;
+    }
 
     NSMutableString *output = [NSMutableString string];
     [output appendString:@"\n--------------------------------------------------------------------------------\n"];
