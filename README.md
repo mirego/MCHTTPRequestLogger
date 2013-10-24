@@ -11,6 +11,14 @@ Just add the following code to your `UIApplicationDelegate`, in the method `-app
 [[MCHTTPRequestLogger sharedLogger] setJSONOutputStyle:MCHTTPRequestLoggerJSONOutputStylePrettyPrinted];
 ```
 
+## Disabling the logging service for a specific HTTP request
+
+Add the `MCHTTPRequestLoggerDefaultHeaderIgnore` HTTP header to the NSMutableURLRequest like this:
+```objc
+[request addValue:@"YES" forHTTPHeaderField:MCHTTPRequestLoggerDefaultHeaderIgnore];
+```
+The value for the header is not important. To disable the logging, MCHTTPRequestLogger search only the presence of the header.
+
 ## Important Notes
 
 - This code has been known to work on iOS 5.x+.
