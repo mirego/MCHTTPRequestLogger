@@ -1,4 +1,6 @@
 # MCHTTPRequestLogger - Output HTTP requests made with AFNetworking in the debug console.
+[![Badge w/ Version](https://cocoapod-badges.herokuapp.com/v/MCHTTPRequestLogger/badge.png)](https://cocoadocs.org/docsets/MCHTTPRequestLogger)
+[![Badge w/ Platform](https://cocoapod-badges.herokuapp.com/p/MCHTTPRequestLogger/badge.png)](https://cocoadocs.org/docsets/MCHTTPRequestLogger)
 
 `MCHTTPRequestLogger` is an extension to [AFNetworking](http://github.com/AFNetworking/AFNetworking/) that logs every requests and responses as they are sent and received. It is a lot more verbose than [AFHTTPRequestOperationLogger](http://github.com/AFNetworking/AFHTTPRequestOperationLogger/), by design.
 
